@@ -1,0 +1,43 @@
+﻿<Window x:Class="Sleeptimer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sleeptimer"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Таймер выключения компьютера" Height="327.125" Width="490" FontSize="20" WindowStartupLocation="CenterScreen">
+
+    <Border MinWidth="350"   Background="White" VerticalAlignment="Top" Padding="30" MaxWidth="350" CornerRadius="20" Height="225" Margin="0 20 0 0">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="10" Color="Gray" ShadowDepth="0" />
+        </Border.Effect>
+
+        <StackPanel Margin="0,-20">
+            <materialDesign:TimePicker FontSize="30" HorizontalAlignment="Center" x:Name="TimeFirst" Is24Hours="True" 
+                                       SelectedTimeFormat="Long" Text="00:00:00" WithSeconds="True" FontWeight="Bold"  />
+       
+ 
+            <ComboBox x:Name="PowerMode" SelectedIndex="0"  FontSize="15" >
+                <ComboBoxItem Content="Выключить" />
+                <ComboBoxItem Content="Спящий режим"/>
+                <ComboBoxItem Content="Перезагрузить"/>
+                <ComboBoxItem Content="Гибернация"/>
+                <ComboBoxItem Content="Выйти из системы"/>
+            </ComboBox>
+            
+            <ComboBox x:Name="TimeMode" SelectedIndex="0" HorizontalAlignment="Left" Width="290"  FontSize="15" >
+                <ComboBoxItem Content="Через заданное время" />
+                <ComboBoxItem Content="В заданное время"/>
+            </ComboBox>
+            <Grid >
+                <materialDesign:TimePicker  FontSize="15" x:Name="TimeSecond" HorizontalAlignment="Left" Width="290" 
+                                            Is24Hours="True" SelectedTimeFormat="Long" WithSeconds="True" Text="01:00:00" />
+            </Grid>
+            <Button Name="StartStop"  Content="Старт" Style="{StaticResource MaterialDesignFlatButton}" Click="StartStop_Click"/>
+            
+
+        </StackPanel>
+    </Border>
+
+</Window>

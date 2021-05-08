@@ -47,6 +47,7 @@ namespace Sleeptimer
         private void timer_Tick(object sender, EventArgs e)
         {
             second++;
+
             if (second > 59)
             {
                 minute++;

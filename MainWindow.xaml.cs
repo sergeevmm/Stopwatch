@@ -20,23 +20,24 @@ namespace Sleeptimer
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    { 
-        DispatcherTimer timer = new DispatcherTimer();
-        DateTime time, timeSlider;
-        private int secondSlider = 0;
-        private CurrentStatus currentStatus = CurrentStatus.Wait;
-        enum CurrentStatus
+    {
+        private DispatcherTimer timer = new DispatcherTimer();
+        private DateTime time, timeSlider;
+        private int secondSlider;
+        private TimerStatus currentStatus = TimerStatus.Wait; 
+        enum TimerStatus
         {
             Start,
-            Stop,
-            Pause,
+            Stop, 
             Wait
         }
+         
         public MainWindow()
         {
             InitializeComponent();
-            RefreshEnableControls();
+            RefreshEnableControls(); 
         }
+         
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             TimerStart();
@@ -44,72 +45,64 @@ namespace Sleeptimer
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             TimerStop();
-        }
-        private void Pause_Click(object sender, RoutedEventArgs e)
-        {
-            TimerPause();
-        }
-        
+        } 
         private void TimerStart()
         {
             timer = new DispatcherTimer();
-
-            if (currentStatus != CurrentStatus.Pause) 
-                ResetTime(); 
-
+            ReloadTime(); 
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
             timer.Start();
-            currentStatus = CurrentStatus.Start;
+            currentStatus = TimerStatus.Start;
             RefreshEnableControls();
 
         }
 
-        private void ResetTime()
+        private void ReloadTime()
         {
-            TimeFirst.Text = TimeSecond.Text;
-            time = DateTime.Parse(TimeFirst.Text);
+            if (((ComboBoxItem) TimeMode.SelectedValue).Name == "InTime")
+            {
+                time = DateTime.Parse(TimeFirst.Text) - DateTime.Now.TimeOfDay;
+                TimeFirst.Text = "00:00:00";
+            } 
+            else
+            { 
+                TimeFirst.Text = TimeSecond.Text;
+                time = DateTime.Parse(TimeFirst.Text);
+            }
+                
         }
 
         private void TimerStop()
         {
-            ResetTime();
+            ReloadTime();
             timer.Stop();
-            currentStatus = CurrentStatus.Stop;
+            currentStatus = TimerStatus.Stop;
             RefreshEnableControls();
         }
-
-        private void TimerPause()
-        {
-            timer.Stop();
-            currentStatus = CurrentStatus.Pause;
-            RefreshEnableControls();
-        }
-
+         
         private void timer_Tick(object sender, EventArgs e)
         { 
             time = time.AddSeconds(-1);  
             TimeFirst.Text = time.ToString("HH:mm:ss"); 
+            if (time.Hour == 0 && time.Minute == 0 && time.Second == 0)
+                EndTimer();
         }
 
         private void RefreshEnableControls()
         {
             switch (currentStatus)
             {
-                case CurrentStatus.Start: 
+                case TimerStatus.Start: 
                     Start.IsEnabled = PanelMode.IsEnabled = PanelEditTime.IsEnabled = false;
-                    Stop.IsEnabled = Pause.IsEnabled = true; 
+                    Stop.IsEnabled = true; 
                     break;
-                case CurrentStatus.Stop: 
-                    Stop.IsEnabled = Pause.IsEnabled = false; 
+                case TimerStatus.Stop: 
+                    Stop.IsEnabled = false; 
                     Start.IsEnabled = PanelMode.IsEnabled = PanelEditTime.IsEnabled = true;
-                    break;
-                case CurrentStatus.Pause: 
-                    Pause.IsEnabled = PanelEditTime.IsEnabled = false;
-                    Start.IsEnabled = Stop.IsEnabled = PanelMode.IsEnabled = true; 
-                    break;
-                case CurrentStatus.Wait:
-                    Stop.IsEnabled = Pause.IsEnabled = false;
+                    break; 
+                case TimerStatus.Wait:
+                    Stop.IsEnabled = false;
                     Start.IsEnabled = PanelMode.IsEnabled = PanelEditTime.IsEnabled = true; 
                     break;
             }
@@ -117,14 +110,33 @@ namespace Sleeptimer
 
         private void EndTimer()
         {
+            TimerStop(); 
 
-        }
+            if (MessageBox.Show("Вы действительно хотите выключить компьютер?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.No)
+                return;
 
+            switch (((ComboBoxItem)PowerMode.SelectedValue).Name)
+            {
+                case "Shutdown":
+                    System.Diagnostics.Process.Start("shutdown", "-s -t 0"); 
+                    break;
+                case "Sleep":
+                    System.Diagnostics.Process.Start("shutdown", "-s - f - t 00"); 
+                    break;
+                case "Reboot":
+                    System.Diagnostics.Process.Start("shutdown", "-r -t 0");
+                    break;
+                case "SignOut":
+                    System.Diagnostics.Process.Start("shutdown", "-1");
+                    break; 
+            } 
+             
+        } 
         private void SliderTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             secondSlider = Convert.ToInt32(SliderTime.Value) * 600;
             timeSlider = DateTime.ParseExact("00:00:00", "HH:mm:ss", null);
-            timeSlider = timeSlider.AddSeconds(secondSlider);
+            timeSlider = timeSlider.AddSeconds(secondSlider == 86400? 86399 : secondSlider);
             TimeSecond.Text = timeSlider.ToString("HH:mm:ss"); 
         }
     }

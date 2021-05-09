@@ -6,24 +6,28 @@
         xmlns:local="clr-namespace:Sleeptimer"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Таймер выключения компьютера" Height="340" Width="390" FontSize="20" WindowStartupLocation="CenterScreen" MinWidth="390" MinHeight="340">
+        Title="Таймер выключения компьютера" Height="360" Width="390" FontSize="20" WindowStartupLocation="CenterScreen" MinWidth="390" MinHeight="360">
 
     <Grid Background="#ffdadada">
-        <Border MinWidth="350"   Background="White" VerticalAlignment="Top" Padding="30" MaxWidth="350" CornerRadius="20" Height="272" Margin="0 20 0 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="118*"/>
+            <ColumnDefinition Width="73*"/>
+        </Grid.ColumnDefinitions>
+        <Border MinWidth="350"   Background="White" VerticalAlignment="Top" Padding="30" MaxWidth="350" CornerRadius="20" Height="288" Margin="0 20 0 0" Grid.ColumnSpan="2">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Color="Gray" ShadowDepth="0" />
             </Border.Effect>
 
-            <StackPanel Margin="0,-20">
+            <StackPanel Margin="0,-20,0,-30">
 
                 <materialDesign:TimePicker FontSize="30" HorizontalAlignment="Center" x:Name="TimeFirst" Is24Hours="True" 
                                        SelectedTimeFormat="Long" Text="00:00:00" WithSeconds="True" FontWeight="Bold" IsEnabled="False"  />
                 <StackPanel Name="PanelMode"  Margin="0 10 0 0" >
                     <ComboBox x:Name="PowerMode" SelectedIndex="0"  FontSize="15" >
-                        <ComboBoxItem Content="Выключить" Name="Shutdown" />
+                        <ComboBoxItem Content="Завершение работы" Name="Shutdown" />
                         <ComboBoxItem Content="Спящий режим" Name="Sleep"/>
-                        <ComboBoxItem Content="Перезагрузить" Name="Reboot"/>
-                        <ComboBoxItem Content="Выйти из системы" Name="SignOut"/>
+                        <ComboBoxItem Content="Перезагрузка" Name="Reboot"/>
+                        <ComboBoxItem Content="Выход из системы" Name="SignOut"/>
                     </ComboBox>
 
                     <ComboBox x:Name="TimeMode" SelectedIndex="0" HorizontalAlignment="Left" Width="290"  FontSize="15" >
@@ -34,8 +38,8 @@
 
                 <StackPanel Name="PanelEditTime"  Margin="0 10 0 0">
                     <materialDesign:TimePicker  FontSize="15" x:Name="TimeSecond" HorizontalAlignment="Left" Width="290" 
-                                            Is24Hours="True" SelectedTimeFormat="Long" WithSeconds="True" Text="01:00:00" />
-                    <Slider Name="SliderTime"  Value="0" Minimum="0" Maximum="144" SelectionStart="0" 
+                                            Is24Hours="True" SelectedTimeFormat="Long" WithSeconds="True" Text="00:10:00" />
+                    <Slider Name="Slider"  Value="1" Minimum="1" Maximum="144" SelectionStart="1" 
                         IsSelectionRangeEnabled="True" ValueChanged="SliderTime_ValueChanged" />
                 </StackPanel>
 
@@ -43,10 +47,11 @@
                     <Button FontSize="15" HorizontalAlignment="center" Name="Start" Content="Старт" Style="{StaticResource MaterialDesignFloatingActionButton}" Click="Start_Click" IsManipulationEnabled="True"/>
                     <Button FontSize="15" HorizontalAlignment="Right" Name="Stop" Content="Стоп" Style="{StaticResource MaterialDesignFlatButton}" Click="Stop_Click" IsManipulationEnabled="True"/>
                 </Grid>
-
-
+                <Label HorizontalAlignment="Center" Margin="0 10 0 0" FontSize="12" x:Name="CurrentDateTime"  Content="10.12.2021 01:12" RenderTransformOrigin="0.33,0.293" />
             </StackPanel>
+
         </Border>
+
     </Grid>
 
 

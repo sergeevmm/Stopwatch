@@ -22,17 +22,22 @@ namespace Sleeptimer
     public partial class MainWindow : Window
     {
         private DispatcherTimer timer = new DispatcherTimer();
-        private DateTime time, timeSlider;
+        private DateTime timeMain, timeSlider;
         private int sliderSeconds;
-        private TimerStatus Status = TimerStatus.Wait; 
+        private TimerStatus Status = TimerStatus.Wait;
 
         enum TimerStatus
         {
             Start,
-            Stop, 
+            Stop,
             Wait
         }
-         
+
+        public void Size(object sender, RoutedEventArgs routedEventArgs)
+        {
+       
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -46,7 +51,9 @@ namespace Sleeptimer
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.IsEnabled = true;
             timer.Tick += (o, e) =>
-            { CurrentDateTime.Content = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString(); };
+            {
+                CurrentDateTime.Content = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+            };
             timer.Start();
         }
         private void Start_Click(object sender, RoutedEventArgs e)
@@ -56,11 +63,11 @@ namespace Sleeptimer
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             TimerStop();
-        } 
+        }
         private void TimerStart()
         {
             ReloadTimeControls();
-            timer = new DispatcherTimer(); 
+            timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
             timer.Start();
@@ -73,31 +80,31 @@ namespace Sleeptimer
         {
             TimeFirst.Text = TimeSecond.Text;
 
-            if (((ComboBoxItem) TimeMode.SelectedValue).Name == "InTime") 
-                time = DateTime.Parse(TimeFirst.Text) - DateTime.Now.TimeOfDay;  
-            else 
-                time = DateTime.Parse(TimeFirst.Text); 
-                
+            if (((ComboBoxItem)TimeMode.SelectedValue).Name == "InTime")
+                timeMain = DateTime.Parse(TimeFirst.Text) - DateTime.Now.TimeOfDay;
+            else
+                timeMain = DateTime.Parse(TimeFirst.Text);
+
         }
 
         private void TimerStop()
-        { 
+        {
             timer.Stop();
             Status = TimerStatus.Stop;
             ReloadTimeControls();
             RefreshEnableControls();
         }
-         
+
         private void timer_Tick(object sender, EventArgs e)
-        { 
-            time = time.AddSeconds(-1);  
-            TimeFirst.Text = time.ToString("HH:mm:ss"); 
-            if (time.Hour == 0 && time.Minute == 0 && time.Second == 0)
+        {
+            timeMain = timeMain.AddSeconds(-1);
+            TimeFirst.Text = timeMain.ToString("HH:mm:ss");
+            if (timeMain.Hour == 0 && timeMain.Minute == 0 && timeMain.Second == 0)
                 EndTimer();
         }
 
         private void RefreshEnableControls()
-        { 
+        {
             Start.IsEnabled = PanelMode.IsEnabled = PanelEditTime.IsEnabled = Status != TimerStatus.Start;
             Stop.IsEnabled = Status == TimerStatus.Start;
         }
@@ -105,7 +112,7 @@ namespace Sleeptimer
         private void EndTimer()
         {
             TimerStop();
-            ShutDownSystem();  
+            ShutDownSystem();
         }
 
         private void ShutDownSystem()
@@ -131,8 +138,8 @@ namespace Sleeptimer
         {
             sliderSeconds = Convert.ToInt32(Slider.Value) * 600;
             timeSlider = DateTime.ParseExact("00:00:00", "HH:mm:ss", null);
-            timeSlider = timeSlider.AddSeconds(sliderSeconds == 86400? 86399 : sliderSeconds);
-            TimeSecond.Text = timeSlider.ToString("HH:mm:ss"); 
+            timeSlider = timeSlider.AddSeconds(sliderSeconds == 86400 ? 86399 : sliderSeconds);
+            TimeSecond.Text = timeSlider.ToString("HH:mm:ss");
         }
     }
 }

@@ -6,22 +6,69 @@
         xmlns:local="clr-namespace:Sleeptimer"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Таймер выключения компьютера" Height="360" Width="390" FontSize="20" WindowStartupLocation="CenterScreen" MinWidth="390" MinHeight="360">
+        Title="Таймер выключения компьютера" Background="Transparent" Height="309" Width="390" FontSize="20" 
+        WindowStartupLocation="CenterScreen" MinWidth="390" MinHeight="360" AllowsTransparency="True" WindowStyle="None">
 
-    <Grid Background="#ffdadada">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="118*"/>
-            <ColumnDefinition Width="73*"/>
-        </Grid.ColumnDefinitions>
-        <Border MinWidth="350"   Background="White" VerticalAlignment="Top" Padding="30" MaxWidth="350" CornerRadius="20" Height="288" Margin="0 20 0 0" Grid.ColumnSpan="2">
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="10"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+
+
+    <Grid Margin="5">
+        <Border Name="Border"   Background="White" VerticalAlignment="Top" Padding="30"  CornerRadius="20" BorderThickness=".8">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="Gray" ShadowDepth="0" />
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0" />
             </Border.Effect>
 
             <StackPanel Margin="0,-20,0,-30">
-
-                <materialDesign:TimePicker FontSize="30" HorizontalAlignment="Center" x:Name="TimeFirst" Is24Hours="True" 
-                                       SelectedTimeFormat="Long" Text="00:00:00" WithSeconds="True" FontWeight="Bold" IsEnabled="False"  />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <!--Кнопка для сворачивания окна-->
+                        <Button  VerticalAlignment="Top" Width="34" Height="26" WindowChrome.IsHitTestVisibleInChrome="True">
+                            <Grid MaxHeight="9" MaxWidth="9">
+                                <Path Stroke="Black" StrokeThickness="1"
+                                      Stretch="None" RenderOptions.EdgeMode="Aliased"
+                                      Data="M0,8 H8 M0,7 H8 M0,6 H8"/>
+                            </Grid>
+                        </Button>
+                        <!--Кнопка для разворачивания окна-->
+                        <Button VerticalAlignment="Top" Width="34" Height="26" WindowChrome.IsHitTestVisibleInChrome="True" Click="Size">
+                            <Grid MaxHeight="9" MaxWidth="9">
+                                <Path Stroke="Black" StrokeThickness="1"
+                                      Stretch="None" RenderOptions.EdgeMode="Aliased"
+                                      Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"/>
+                            </Grid>
+                        </Button>
+                        <!--Кнопка закрытия окна-->
+                        <Button VerticalAlignment="Top" Width="34" Height="26" WindowChrome.IsHitTestVisibleInChrome="True">
+                            <Viewbox Width="16" Height="16">
+                                <Canvas Width="24" Height="24">
+                                    <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" 
+                                          Fill="Black" />
+                                </Canvas>
+                            </Viewbox>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <materialDesign:TimePicker FontSize="30" x:Name="TimeFirst" Is24Hours="True" 
+                                       SelectedTimeFormat="Long" Text="00:00:00" WithSeconds="True" FontWeight="Bold" IsEnabled="False" HorizontalAlignment="Center"  />
                 <StackPanel Name="PanelMode"  Margin="0 10 0 0" >
                     <ComboBox x:Name="PowerMode" SelectedIndex="0"  FontSize="15" >
                         <ComboBoxItem Content="Завершение работы" Name="Shutdown" />
@@ -30,28 +77,27 @@
                         <ComboBoxItem Content="Выход из системы" Name="SignOut"/>
                     </ComboBox>
 
-                    <ComboBox x:Name="TimeMode" SelectedIndex="0" HorizontalAlignment="Left" Width="290"  FontSize="15" >
+                    <ComboBox x:Name="TimeMode" SelectedIndex="0"  FontSize="15" >
                         <ComboBoxItem Content="Через заданное время" Name="ThroughTime"/>
                         <ComboBoxItem Content="В заданное время" Name="InTime"/>
                     </ComboBox>
                 </StackPanel>
 
                 <StackPanel Name="PanelEditTime"  Margin="0 10 0 0">
-                    <materialDesign:TimePicker  FontSize="15" x:Name="TimeSecond" HorizontalAlignment="Left" Width="290" 
+                    <materialDesign:TimePicker  FontSize="15" x:Name="TimeSecond" 
                                             Is24Hours="True" SelectedTimeFormat="Long" WithSeconds="True" Text="00:10:00" />
                     <Slider Name="Slider"  Value="1" Minimum="1" Maximum="144" SelectionStart="1" 
                         IsSelectionRangeEnabled="True" ValueChanged="SliderTime_ValueChanged" />
                 </StackPanel>
 
                 <Grid Margin="0 10 0 0" >
-                    <Button FontSize="15" HorizontalAlignment="center" Name="Start" Content="Старт" Style="{StaticResource MaterialDesignFloatingActionButton}" Click="Start_Click" IsManipulationEnabled="True"/>
-                    <Button FontSize="15" HorizontalAlignment="Right" Name="Stop" Content="Стоп" Style="{StaticResource MaterialDesignFlatButton}" Click="Stop_Click" IsManipulationEnabled="True"/>
+                    <Button FontSize="15" HorizontalAlignment="center" Name="Start" Content="Старт" Style="{StaticResource MaterialDesignFloatingActionButton}" Click="Start_Click" IsManipulationEnabled="True" VerticalAlignment="Center"/>
+                    <Button FontSize="15" HorizontalAlignment="Right" Name="Stop" Content="Стоп" Style="{StaticResource MaterialDesignFlatButton}" Click="Stop_Click" IsManipulationEnabled="True" VerticalAlignment="Center"/>
                 </Grid>
                 <Label HorizontalAlignment="Center" Margin="0 10 0 0" FontSize="12" x:Name="CurrentDateTime"  Content="10.12.2021 01:12" RenderTransformOrigin="0.33,0.293" />
             </StackPanel>
 
         </Border>
-
     </Grid>
 
 

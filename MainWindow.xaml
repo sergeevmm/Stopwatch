@@ -8,7 +8,6 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Таймер выключения компьютера" Background="Transparent" Height="309" Width="390" FontSize="20" 
         WindowStartupLocation="CenterScreen" MinWidth="390" MinHeight="360" AllowsTransparency="True" WindowStyle="None">
-
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="10"/>
     </WindowChrome.WindowChrome>
@@ -28,7 +27,7 @@
 
 
     <Grid Margin="5">
-        <Border Name="Border"   Background="White" VerticalAlignment="Top" Padding="30"  CornerRadius="20" BorderThickness=".8">
+        <Border Name="Border"   Background="White" VerticalAlignment="Top" Padding="30"  CornerRadius="20" BorderThickness=".8" MouseDown="Border_MouseDown">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="0" />
             </Border.Effect>
@@ -36,32 +35,28 @@
             <StackPanel Margin="0,-20,0,-30">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="35"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <!--Кнопка для сворачивания окна-->
-                        <Button  VerticalAlignment="Top" Width="34" Height="26" WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button  Name ="btnHideApp"  VerticalAlignment="Top" Margin="0 0 5 0" Width="26" Height="26" 
+                                 WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource MaterialDesignFloatingActionButton}" >
                             <Grid MaxHeight="9" MaxWidth="9">
-                                <Path Stroke="Black" StrokeThickness="1"
+                                <Path Stroke="White" StrokeThickness="1"  MouseDown="btnHideApp_MouseDown"
                                       Stretch="None" RenderOptions.EdgeMode="Aliased"
-                                      Data="M0,8 H8 M0,7 H8 M0,6 H8"/>
+                                      Data="M0,8 H8 M0,7 H8 M0,6 H8" />
                             </Grid>
                         </Button>
-                        <!--Кнопка для разворачивания окна-->
-                        <Button VerticalAlignment="Top" Width="34" Height="26" WindowChrome.IsHitTestVisibleInChrome="True" Click="Size">
-                            <Grid MaxHeight="9" MaxWidth="9">
-                                <Path Stroke="Black" StrokeThickness="1"
-                                      Stretch="None" RenderOptions.EdgeMode="Aliased"
-                                      Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"/>
-                            </Grid>
-                        </Button>
+             
                         <!--Кнопка закрытия окна-->
-                        <Button VerticalAlignment="Top" Width="34" Height="26" WindowChrome.IsHitTestVisibleInChrome="True">
-                            <Viewbox Width="16" Height="16">
+                        <Button Name="btnCloseApp"   VerticalAlignment="Top" Width="26" Height="26" 
+                                WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource MaterialDesignFloatingActionButton}" >
+                            <Viewbox Width="16" Height="16" MouseDown="btnCloseApp_MouseDown"  >
                                 <Canvas Width="24" Height="24">
-                                    <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" 
-                                          Fill="Black" />
+                                    <Path
+                                          Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" 
+                                          Fill="White" />
                                 </Canvas>
                             </Viewbox>
                         </Button>

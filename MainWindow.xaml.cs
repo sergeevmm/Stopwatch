@@ -133,6 +133,23 @@ namespace Sleeptimer
                     break;
             }
         }
+         
+        private void btnHideApp_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void btnCloseApp_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(MessageBox.Show("Вы действительно хотите закрыть приложение? Таймер не будет завершен.","Выход",MessageBoxButton.YesNo,MessageBoxImage.Information) == MessageBoxResult.Yes)
+                this.Close();
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
 
         private void SliderTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

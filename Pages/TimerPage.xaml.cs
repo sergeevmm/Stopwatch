@@ -14,13 +14,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace Sleeptimer
+namespace Stopwatch
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for TimerPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class TimerPage : Page
+    { 
         private DispatcherTimer timer = new DispatcherTimer();
         private DateTime timeMain, timeSlider;
         private int sliderSeconds;
@@ -32,17 +32,19 @@ namespace Sleeptimer
             Stop,
             Wait
         }
-
-        public void Size(object sender, RoutedEventArgs routedEventArgs)
+         
+        public TimerPage()
         {
-       
-        }
-
-        public MainWindow()
-        {
-            InitializeComponent();
+            InitializeComponent(); 
             RefreshEnableControls();
             SetCurrentDateTimeToBottom();
+            CreateEventToControls();
+        }
+
+        private void CreateEventToControls()
+        { 
+            Start.Click += (s, a) => { TimerStart(); };
+            Stop.Click += (s, a) => { TimerStop(); };
         }
 
         private void SetCurrentDateTimeToBottom()
@@ -55,15 +57,8 @@ namespace Sleeptimer
                 CurrentDateTime.Content = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
             };
             timer.Start();
-        }
-        private void Start_Click(object sender, RoutedEventArgs e)
-        {
-            TimerStart();
-        }
-        private void Stop_Click(object sender, RoutedEventArgs e)
-        {
-            TimerStop();
-        }
+        } 
+
         private void TimerStart()
         {
             ReloadTimeControls();
@@ -72,8 +67,7 @@ namespace Sleeptimer
             timer.Tick += timer_Tick;
             timer.Start();
             Status = TimerStatus.Start;
-            RefreshEnableControls();
-
+            RefreshEnableControls(); 
         }
 
         private void ReloadTimeControls()
@@ -134,23 +128,6 @@ namespace Sleeptimer
             }
         }
  
-        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
-        }
-
-        private void btnHideApp_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Вы действительно хотите закрыть приложение? Таймер не будет завершен.", "Выход", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                this.Close();
-        }
-
         private void SliderTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             sliderSeconds = Convert.ToInt32(Slider.Value) * 600;

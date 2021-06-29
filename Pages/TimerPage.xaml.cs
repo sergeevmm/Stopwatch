@@ -111,21 +111,15 @@ namespace Stopwatch
 
         private void ShutDownSystem()
         {
+        string command = string.Empty;
             switch (((ComboBoxItem)PowerMode.SelectedValue).Name)
             {
-                case "Shutdown":
-                    System.Diagnostics.Process.Start("shutdown", "-s -t 0");
-                    break;
-                case "Sleep":
-                    System.Diagnostics.Process.Start("shutdown", "-s - f - t 00");
-                    break;
-                case "Reboot":
-                    System.Diagnostics.Process.Start("shutdown", "-r -t 0");
-                    break;
-                case "SignOut":
-                    System.Diagnostics.Process.Start("shutdown", "-1");
-                    break;
+                case "Shutdown":command = "-s -t 0"; break;
+                case "Sleep": command ="-s - f - t 00" ; break;
+                case "Reboot": command ="-r -t 0"); break;
+                case "SignOut": command ="-1"; break;
             }
+            System.Diagnostics.Process.Start("shutdown", command);
         }
  
         private void SliderTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
